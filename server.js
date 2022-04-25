@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const uniqid = require('uniqid');
+const { json } = require('express/lib/response');
 
 const app = express();
 const PORT = 3001;
@@ -21,8 +23,8 @@ app.get("/api/notes", (req, res) => {
             return
         }
         console.log(data)
-    //return us a JSON object to html page 
-        const results = JSON.parse(data); 
+        //return us a JSON object to html page 
+        const results = JSON.parse(data);
         console.log(results);
 
         res.json(results)
@@ -30,7 +32,39 @@ app.get("/api/notes", (req, res) => {
 
 });
 
+app.post("/api/notes", (req, res) => {
+    console.log("New note", req.body);
+    //console.log(uniqid()); // -> 4n5pxq24kpiob12og9
 
+    //reading the JSON file 
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        console.log(data)
+        //return us a JSON object to html page 
+        const results = JSON.parse(data);
+
+        const newNote = { ...req.body, id: uniqid() };
+        //combine old and new notes 
+        const combineAll = [...results, newNote]
+        fs.writeFile('./db/db.json', JSON.stringify(combineAll), (err, datas) => {
+            if (err) {
+                return console.error(err);
+            }
+            console.log("File saved successfully!");
+
+            //return the json 
+
+            res.json(combineAll)
+        });
+
+    })
+
+});
+
+// `DELETE /api/notes/:id` should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
 
 
 //setuop   HTML routes
