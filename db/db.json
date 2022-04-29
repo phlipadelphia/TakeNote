@@ -1,17 +1,1 @@
-[
-    {
-        "title": "First Note",
-        "text": "stuff",
-        "id": "4wla5165il2fbsfsq"
-    },
-    {
-        "title": "Second Note",
-        "text": "more stuff",
-        "id": "4wla5165il2fbskbo"
-    },
-    {
-        "title": "Third Note Yaya!",
-        "text": "text here",
-        "id": "4wla5165il2fbstas"
-    }
-]
+[{"title":"First Note","text":"stuff","id":"4wla5165il2fbsfsq"},{"title":"Second Note","text":"more stuff","id":"4wla5165il2fbskbo"},{"title":"Third Note Yaya!","text":"text here","id":"4wla5165il2fbstas"},{"title":"Hello Note","text":"stfff","id":"4wla516l0l2fcpy2l"},{"title":"More notes","text":"Lets go","id":"4wla516vrl2fddb7h"}]
