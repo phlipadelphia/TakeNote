@@ -3,17 +3,23 @@ const path = require('path');
 const fs = require('fs');
 const uniqid = require('uniqid');
 const { json } = require('express/lib/response');
+const { parse } = require('path');
 
 const app = express();
-const PORT = 3001;
+
+const PORT = process.env.PORT || 3000
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(express.static('public'));
 
-//setuop  API routes
-//GET /notes` reads the json file and gets all the data from it 
+// Setup the main button on index to work/send you to notes.
+app.get('/notes', (req, res) => {
+    res.sendFile(__dirname + '/public/notes.html')
+})
+
+// Setup API routes
+// GET reads the json file and gets all the data from it 
 app.get("/api/notes", (req, res) => {
 
     //reading the JSON file 
@@ -31,10 +37,10 @@ app.get("/api/notes", (req, res) => {
     })
 
 });
-
+// POST will log all the collected data as a saved posted note on the page. 
 app.post("/api/notes", (req, res) => {
     console.log("New note", req.body);
-    //console.log(uniqid()); // -> 4n5pxq24kpiob12og9
+    //console.log(uniqid)
 
     //reading the JSON file 
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
@@ -61,11 +67,22 @@ app.post("/api/notes", (req, res) => {
         });
 
     })
+// DELETE will delete any given saved note on the page and it's data. 
+app.delete("/api/notes/:id", (req, res) => {
+    let noteRecall = JSON.parse(fs.readFileSync("./db/db.json"))
+    let whichNote = (req.params.id).toString();
 
+    noteRecall = noteRecall.filter(selectedNote => {
+        return selectedNote.id != whichNote;
+    })
+    console.log(noteRecall)
+    fs.writeFileSync(__dirname + '/db/db.json', JSON.stringify(noteRecall))
+    res.json(noteRecall)
+    })    
 }); 
 
-//setuop   HTML routes
-//GET /notes` should return the `notes.html` file.
+// Setup HTML routes
+// GET /notes should return the `notes.html` file.
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'))
 });
